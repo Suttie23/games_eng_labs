@@ -28,7 +28,7 @@ add_custom_target(copy_dll ALL COMMAND ${CMAKE_COMMAND}
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>
 )
 
-#### Practical 1 ####
+#### Practical 1 - Pong ####
 file(GLOB_RECURSE SOURCES practical_1/*.cpp practical_1/*.h)
 add_executable(PRACTICAL_1 ${SOURCES})
 target_include_directories(PRACTICAL_1 PRIVATE ${SFML_INCS})
@@ -40,3 +40,14 @@ set_target_properties(PRACTICAL_1
 )
 add_dependencies(PRACTICAL_1 copy_dll)
 add_dependencies(PRACTICAL_1 copy_resources)
+
+#### Practical 2 - Space Invaders ####
+file(GLOB_RECURSE SOURCES practical_2/*.cpp practical_2/*.h)
+add_executable(PRACTICAL_2 ${SOURCES} )
+target_include_directories(PRACTICAL_2 SYSTEM PRIVATE ${SFML_INCS})
+target_link_libraries(PRACTICAL_2 sfml-graphics)
+set_target_properties(PRACTICAL_2 
+    PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
+)
+add_dependencies(PRACTICAL_2 copy_resources)
