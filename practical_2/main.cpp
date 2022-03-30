@@ -1,21 +1,40 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
-// Green Circle!
-int main() {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+using namespace sf;
+using namespace std;
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
-        window.clear();
-        window.draw(shape);
-        window.display();
+//Main.cpp
+sf::Texture spritesheet;
+sf::Sprite invader;
+
+const int gameWidth = 800;
+const int gameHeight = 600;
+
+void Load() {
+    if (!spritesheet.loadFromFile("res/invaders_sheet.png")) {
+        cerr << "Failed to load spritesheet!" << std::endl;
     }
-    return 0;
+    invader.setTexture(spritesheet);
+    invader.setTextureRect(IntRect(Vector2(0, 0), Vector2(32, 32)));
+}
+
+void Render(RenderWindow& window) {
+    window.draw(invader);
+}
+
+int main() {
+
+	RenderWindow window(VideoMode(gameWidth, gameHeight), "FOR LEGAL REASONS THIS IS NOT SPACE INVADERS");
+	Load();
+
+
+	while (window.isOpen()) {
+		window.clear();
+		Render(window);
+		window.display();
+	}
+
+	return 0;
+
 }
