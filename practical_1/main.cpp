@@ -38,7 +38,7 @@ void Reset() {
 	// Update Score Text
 	text.setString(std::to_string(scoreLP) + "\t:\t" + std::to_string(scoreRP));
 	// Keep Score Text Centered
-	text.setPosition(Vector2f(gameWidth / 2, gameHeight / 2));
+	text.setPosition(Vector2f(gameWidth - 425, gameHeight - 580 ));
 
 }
 
@@ -167,6 +167,7 @@ void Render(RenderWindow& window) {
 	window.draw(paddles[0]);
 	window.draw(paddles[1]);
 	window.draw(ball);
+	window.draw(text);
 
 }
 
