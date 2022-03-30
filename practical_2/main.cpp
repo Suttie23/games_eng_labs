@@ -1,40 +1,84 @@
 #include <SFML/Graphics.hpp>
+#include "game.h"
+#include "ship.h"
 #include <iostream>
 
 using namespace sf;
 using namespace std;
 
-//Main.cpp
 sf::Texture spritesheet;
 sf::Sprite invader;
 
-const int gameWidth = 800;
-const int gameHeight = 600;
+std::vector<Ship*> ships;
 
-void Load() {
-    if (!spritesheet.loadFromFile("res/invaders_sheet.png")) {
-        cerr << "Failed to load spritesheet!" << std::endl;
-    }
-    invader.setTexture(spritesheet);
-    invader.setTextureRect(IntRect(Vector2(0, 0), Vector2(32, 32)));
+
+void Load()
+{
+	Invader::speed = 45.0f;
+
+	for (int i = 0; i < invaders_rows; i++) {
+		for (int j = 0; j < invaders_columns; j++) {
+			Invader* inv = new Invader(IntRect(Vector2(32 * i, 0), Vector2(32, 32)), { 100.0f + j * 50.0f,10.0f + i * 50.0f });
+			ships.push_back(inv);
+		}
+	}
+
+	if (!spritesheet.loadFromFile("res/invaders_sheet.png"))
+	{
+		cerr << "Failed to load spritesheet!" << std::endl;
+	}
+
 }
 
-void Render(RenderWindow& window) {
-    window.draw(invader);
+void Render(RenderWindow& window)
+{
+
+	window.draw(invader);
+
+	for (const auto s : ships)
+	{
+		window.draw(*s);
+	}
+
 }
 
-int main() {
+void Update(RenderWindow& window) {
+	// Reset clock, recalculate deltatime
+	static Clock clock;
+	float dt = clock.restart().asSeconds();
+	// check and consume events
+	Event event;
+	while (window.pollEvent(event))
+	{
+		if (event.type == Event::Closed)
+		{
+			window.close();
+			return;
+		}
+	}
 
-	RenderWindow window(VideoMode(gameWidth, gameHeight), "FOR LEGAL REASONS THIS IS NOT SPACE INVADERS");
+	for (auto& s : ships)
+	{
+		s->Update(dt);
+	}
+
+	// Quit Via ESC Key
+	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	{
+		window.close();
+	}
+
+}
+
+int main()
+{
+	RenderWindow window(VideoMode(gameWidth, gameHeight), "FOR LEGAL PURPOSES THIS IS NOT SPACE INVADERS");
 	Load();
-
-
 	while (window.isOpen()) {
 		window.clear();
+		Update(window);
 		Render(window);
 		window.display();
 	}
-
 	return 0;
-
 }
