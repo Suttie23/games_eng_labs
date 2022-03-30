@@ -20,6 +20,10 @@ CircleShape ball;
 RectangleShape paddles[2];
 Vector2f ballVelocity;
 bool server = false;
+Font font;
+Text text;
+int scoreLP = 0;
+int scoreRP = 0;
 
 void Reset() {
 
@@ -31,9 +35,21 @@ void Reset() {
 	ball.setPosition(Vector2f(gameWidth / 2, gameHeight / 2));
 	ballVelocity = { (server ? 100.0f : -100.0f), 60.0f };
 
+	// Update Score Text
+	text.setString(std::to_string(scoreLP) + "\t:\t" + std::to_string(scoreRP));
+	// Keep Score Text Centered
+	text.setPosition(Vector2f(gameWidth / 2, gameHeight / 2));
+
 }
 
 void Load() {
+
+	// Load font-face from res dir
+	font.loadFromFile("res/Roboto-Light.ttf");
+	// Set text element to use font
+	text.setFont(font);
+	// set the character size to 24 pixels
+	text.setCharacterSize(24);
 
 	// Set size and origin of paddles
 	for (auto& p : paddles) {
@@ -70,7 +86,7 @@ void Update(RenderWindow& window) {
 		window.close();
 	}
 
-	// handle paddle movement
+	// handle player movement
 	float direction1 = 0.0f;
 	if (Keyboard::isKeyPressed(controls[0])) {
 		direction1--;
@@ -81,36 +97,41 @@ void Update(RenderWindow& window) {
 
 	paddles[0].move(Vector2(0.f, direction1 * paddleSpeed * dt));
 
-	float direction2 = 0.0f;
-	if (Keyboard::isKeyPressed(controls[2])) {
-		direction2--;
+	//handle paddle movement AI
+	float directionRP = 0.0f;
+	//check if ball is over or under than paddle, then direction of paddle will be set accordingly
+	if (ball.getPosition().y < paddles[1].getPosition().y && (paddles[1].getPosition().y - paddleSize.y / 2) > 0) {
+		directionRP--;
 	}
-	if (Keyboard::isKeyPressed(controls[3])) {
-		direction2++;
+	else if (ball.getPosition().y > paddles[0].getPosition().y && (paddles[1].getPosition().y + paddleSize.y / 2) < gameHeight) {
+		directionRP++;
 	}
-	paddles[1].move(Vector2(0.f, direction2 * paddleSpeed * dt));
+
+	paddles[1].move(Vector2f(0, directionRP * paddleSpeed * dt));
 
 	// check ball collision
 	const float bx = ball.getPosition().x;
 	const float by = ball.getPosition().y;
-	if (by > gameHeight) { //bottom wall
-	  // bottom wall
+	if (by > gameHeight) {
+		//bottom wall
 		ballVelocity.x *= 1.1f;
 		ballVelocity.y *= -1.1f;
 		ball.move(Vector2(0.f, -10.f));
 	}
-	else if (by < 0) { //top wall
-   // top wall
+	else if (by < 0) {
+		//top wall
 		ballVelocity.x *= 1.1f;
 		ballVelocity.y *= -1.1f;
-		ball.move(Vector2(0.f, -10.f));
-	} 
+		ball.move(Vector2(0.f, 10.f));
+	}
 	else if (bx > gameWidth) {
-		// right wall
+		//right wall
+		scoreLP++;
 		Reset();
 	}
 	else if (bx < 0) {
-		// left wall
+		//left wall
+		scoreRP++;
 		Reset();
 	}
 	else if (
