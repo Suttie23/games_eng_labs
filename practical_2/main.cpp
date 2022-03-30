@@ -2,6 +2,7 @@
 #include "game.h"
 #include "ship.h"
 #include <iostream>
+#include "bullet.h"
 
 using namespace sf;
 using namespace std;
@@ -36,6 +37,7 @@ void Update(RenderWindow& window) {
 	{
 		s->Update(dt);
 	}
+	Bullet::Update(dt);
 
 	// Quit Via ESC Key
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -54,6 +56,7 @@ void Render(RenderWindow& window)
 	{
 		window.draw(*s);
 	}
+	Bullet::Render(window);
 
 }
 

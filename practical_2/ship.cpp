@@ -1,6 +1,7 @@
 // Ship.cpp
 #include "game.h"
 #include "ship.h"
+#include "bullet.h"
 
 using namespace sf;
 using namespace std;
@@ -50,6 +51,14 @@ void Invader::Update(const float& dt)
 		}
 
 	}
+
+	//puts cooldown on firetime and fires when <= 0
+	static float firetime = 0.0f;
+	firetime -= dt;
+	if (firetime <= 0 && rand() % 100 == 0) {
+		Bullet::Fire(getPosition(), true);
+		firetime = 4.0f + (rand() % 60);
+	}
 }
 
 //ship.cpp
@@ -66,6 +75,14 @@ void Player::Update(const float& dt) {
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Right) && getPosition().x + 32 < gameWidth) {
 		move(sf::Vector2f(dt * speed, 0));
+	}
+
+	//cool down on shooting
+	static float firetime = 0.0f;
+	firetime -= dt;
+	if (firetime < 0 && Keyboard::isKeyPressed(Keyboard::Up)) {
+		Bullet::Fire(getPosition(), false);
+		firetime = 0.7f;
 	}
 		
 }
