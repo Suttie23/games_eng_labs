@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/Music.hpp>
+#include <iostream>
 
 using namespace sf;
 using namespace std;
@@ -33,7 +35,7 @@ void Reset() {
 
 	// reset Ball Position
 	ball.setPosition(Vector2f(gameWidth / 2, gameHeight / 2));
-	ballVelocity = { (server ? 100.0f : -100.0f), 60.0f };
+	ballVelocity = { (server ? 100.0f : -100.0f), 80.0f };
 
 	// Update Score Text
 	text.setString(std::to_string(scoreLP) + "\t:\t" + std::to_string(scoreRP));
@@ -87,15 +89,16 @@ void Update(RenderWindow& window) {
 	}
 
 	// handle player movement
-	float direction1 = 0.0f;
-	if (Keyboard::isKeyPressed(controls[0])) {
-		direction1--;
+	float directionLP = 0.0f;
+	if (Keyboard::isKeyPressed(controls[0]) && (paddles[0].getPosition().y - paddleSize.y / 2) > 0) {
+		directionLP--;
 	}
-	if (Keyboard::isKeyPressed(controls[1])) {
-		direction1++;
+	if (Keyboard::isKeyPressed(controls[1]) && (paddles[0].getPosition().y + paddleSize.y / 2) < gameHeight) {
+		directionLP++;
 	}
 
-	paddles[0].move(Vector2(0.f, direction1 * paddleSpeed * dt));
+
+	paddles[0].move(Vector2f(0, directionLP * paddleSpeed * dt));
 
 	//handle paddle movement AI
 	float directionRP = 0.0f;
@@ -159,6 +162,7 @@ void Update(RenderWindow& window) {
 		ballVelocity.y *= 1.1f;
 
 	}
+
 }
 
 void Render(RenderWindow& window) {
@@ -175,6 +179,14 @@ int main() {
 
 	RenderWindow window(VideoMode(gameWidth, gameHeight), "PONG");
 	Load();
+
+	sf::Music music;
+	if (!music.openFromFile("res/music.ogg")) {
+		std::cout << "ERROR" << std::endl;
+	}
+		
+	music.play();
+	music.setVolume(10);
 
 	while (window.isOpen()) {
 		window.clear();
