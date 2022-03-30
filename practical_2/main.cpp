@@ -12,35 +12,10 @@ sf::Sprite invader;
 std::vector<Ship*> ships;
 
 
-void Load()
-{
-	Invader::speed = 45.0f;
-
-	for (int i = 0; i < invaders_rows; i++) {
-		for (int j = 0; j < invaders_columns; j++) {
-			Invader* inv = new Invader(IntRect(Vector2(32 * i, 0), Vector2(32, 32)), { 100.0f + j * 50.0f,10.0f + i * 50.0f });
-			ships.push_back(inv);
-		}
-	}
-
-	if (!spritesheet.loadFromFile("res/invaders_sheet.png"))
-	{
-		cerr << "Failed to load spritesheet!" << std::endl;
-	}
-
-}
-
-void Render(RenderWindow& window)
-{
-
-	window.draw(invader);
-
-	for (const auto s : ships)
-	{
-		window.draw(*s);
-	}
-
-}
+const Keyboard::Key controls[2]{
+	Keyboard::Left,
+	Keyboard::Right
+};
 
 void Update(RenderWindow& window) {
 	// Reset clock, recalculate deltatime
@@ -68,6 +43,37 @@ void Update(RenderWindow& window) {
 		window.close();
 	}
 
+}
+
+void Render(RenderWindow& window)
+{
+
+	window.draw(invader);
+
+	for (const auto s : ships)
+	{
+		window.draw(*s);
+	}
+
+}
+
+void Load()
+{
+	Invader::speed = 45.0f;
+
+	for (int i = 0; i < invaders_rows; i++) {
+		for (int j = 0; j < invaders_columns; j++) {
+			Invader* inv = new Invader(IntRect(Vector2(32 * i, 0), Vector2(32, 32)), { 100.0f + j * 50.0f,10.0f + i * 50.0f });
+			ships.push_back(inv);
+		}
+	}
+
+	if (!spritesheet.loadFromFile("res/invaders_sheet.png"))
+	{
+		cerr << "Failed to load spritesheet!" << std::endl;
+	}
+	Player* player = new Player;
+	ships.push_back(player);
 }
 
 int main()
