@@ -2,12 +2,12 @@
 #include "SFML\Graphics.hpp"
 #include "entity.h"
 
-// Player
+
 class Player : public Entity {
 private:
 	float _speed;
 public:
 	virtual void update(const double dt);
 	Player();
-	virtual void render(sf::RenderWindow& window) const;
+	virtual void render(sf::RenderWindow &window) const;
 };

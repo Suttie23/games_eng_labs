@@ -2,26 +2,26 @@
 #include "entity.h"
 #include "player.h"
 #include "ghost.h"
+#include "entityManager.h"
+#include "system_renderer.h"
+#include "pacman.h"
 #include <iostream>
 
 using namespace sf;
 using namespace std;
 
-vector<Entity*> entities;
-
 void Load() {
-
-	Player* player = new Player();
-	entities.push_back(player);
-	for (int i = 0; i < 4; i++)
-	{
-		Ghost* ghost = new Ghost(new Vector2f(100, 100));
-		entities.push_back(ghost);
-	}
+	//Load Scene-Local Assets
+	gameScene.reset(new GameScene());
+	menuScene.reset(new MenuScene());
+	gameScene->load();
+	menuScene->load();
+	//Start at main menu
+	activeScene = menuScene;
 
 }
 
-void Update(RenderWindow& window) {
+void Update(RenderWindow &window) {
 	static Clock clock;
 	double dt = clock.restart().asSeconds();
 	//check and consume events
@@ -36,20 +36,20 @@ void Update(RenderWindow& window) {
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
 		window.close();
 
-
-	for (auto e : entities) {
-		e->update(dt);
-	}
+	activeScene->update(dt);
+	
 }
 
-void Render(RenderWindow& window) {
-	for (Entity* e : entities) {
-		e->render(window);
-	}
+void Render(RenderWindow &window) { 
+	activeScene->render();
+	//flush to screen
+	Renderer::render();
 }
 
 int main() {
-	RenderWindow window(VideoMode(800, 600), "For legal reasons this isn't Pacman");
+	RenderWindow window(VideoMode(800, 600), "For Legal Reasons this is not Pacman");
+	Renderer::initialise(window);
+	
 	Load();
 	while (window.isOpen()) {
 		window.clear();
