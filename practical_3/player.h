@@ -1,13 +1,14 @@
-// player.h
 #pragma once
 #include "entity.h"
+#include "levelsystem.h"
 
 class Player : public Entity {
 private:
 	float _speed;
 
 public:
-	void Update(double dt) override;
+	void update(double dt) override;
 	Player();
-	void Render(sf::RenderWindow& window) const override;
+	void render(sf::RenderWindow& window) const override;
+	bool validMove(sf::Vector2f pos);
 };
