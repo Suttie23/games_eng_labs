@@ -76,10 +76,10 @@ set_target_properties(PRACTICAL_3
 add_dependencies(PRACTICAL_3 copy_resources)
 
 #### Practical 4 - Pacman ####
-file(GLOB_RECURSE SOURCES practical_4/*.cpp practical_3/*.h)
+file(GLOB_RECURSE SOURCES practical_4/*.cpp practical_4/*.h)
 add_executable(PRACTICAL_4 ${SOURCES} )
 target_include_directories(PRACTICAL_4 SYSTEM PRIVATE ${SFML_INCS})
-target_link_libraries(PRACTICAL_4 lib_tile_level_loader lib_maths sfml-graphics)
+target_link_libraries(PRACTICAL_4 sfml-graphics)
 set_target_properties(PRACTICAL_4 
     PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
