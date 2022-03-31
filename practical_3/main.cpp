@@ -1,21 +1,46 @@
-#include <SFML/Graphics.hpp>
+#include "entity.h"
+#include "player.h"
+#include <iostream>
 
-// Green Circle!
+using namespace std;
+using namespace sf;
+
+Player* player;
+void Load() {
+	player = new Player();
+	player->setPosition(Vector2f(150.f, 150.f));
+}
+void Update(RenderWindow& window) {
+	static Clock clock;
+	float dt = clock.restart().asSeconds();
+	player->Update(dt);
+	//check and consume events
+	Event event;
+	while (window.pollEvent(event)) {
+		if (event.type == Event::Closed) {
+			window.close();
+			return;
+		}
+	}
+
+	//Quit via esc key
+	if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		window.close();
+	}
+}
+void Render(RenderWindow& window) {
+	player->Render(window);
+}
+
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-    return 0;
+	RenderWindow window(VideoMode(800, 600), "TILE ENGINE");
+	Load();
+	while (window.isOpen()) {
+		window.clear();
+		Update(window);
+		Render(window);
+		window.display();
+	}
+	return 0;
 }
