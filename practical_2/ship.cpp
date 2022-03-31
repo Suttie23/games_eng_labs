@@ -59,9 +59,24 @@ void Invader::Update(const float& dt)
 		Bullet::Fire(getPosition(), true);
 		firetime = 4.0f + (rand() % 60);
 	}
+	//wait for set time before remove invader
+	static float destructionTime = 2.0f;
+	for (auto& s : ships) {
+		if (s->is_exploded()) {
+			destructionTime -= dt;
+		}
+		if (destructionTime <= 0.0f) {
+			s->setPosition(Vector2f(-100, -100));
+			destructionTime = 2.0f;
+		}
+	}
 }
 
-//ship.cpp
+void Invader::Explode() {
+	Ship::Explode();
+	speed += 1.0f;
+}
+
 float speed = 100.0f;
 Player::Player() : Ship(IntRect(Vector2(160, 32), Vector2(32, 32))) {
 	setPosition({ gameWidth * .5f, gameHeight - 32.f });
@@ -85,4 +100,8 @@ void Player::Update(const float& dt) {
 		firetime = 0.7f;
 	}
 		
+}
+
+void Player::Explode() {
+
 }
