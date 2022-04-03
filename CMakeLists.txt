@@ -33,6 +33,12 @@ add_library(lib_maths INTERFACE)
 target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
 target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE ${SFML_INCS})
 
+# B2D - Box2D phyics library
+add_subdirectory("lib/b2d/Box2D")
+#include_directories("lib/b2d/Box2D/")
+set(B2D_INCS "lib/b2d/Box2D/")
+link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
+
 #### Custom Targets ####
 add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
   -E copy_directory
@@ -90,3 +96,10 @@ set_target_properties(PRACTICAL_4
 	 PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
 	 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )
+
+#### Practical 5 - Physics ####
+file(GLOB_RECURSE SOURCES practical_5/*.cpp practical_5/*.h)
+add_executable(PRACTICAL_5 ${SOURCES})
+target_include_directories(PRACTICAL_5 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
+target_link_libraries(PRACTICAL_5 Box2D sfml-graphics)
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_5)
