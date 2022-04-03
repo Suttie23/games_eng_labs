@@ -7,8 +7,8 @@ void EntityManager::update(double dt) {
 }
 
 
-void EntityManager::render(sf::RenderWindow &window) {
+void EntityManager::render(sf::RenderWindow& window) {
 	for (auto item : list) {
-		item->render(window); 
+		item->render();
 	}
 }

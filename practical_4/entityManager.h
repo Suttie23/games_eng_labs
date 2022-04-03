@@ -1,5 +1,6 @@
 #pragma once
-#include "entity.h"
+#include "ecm.h"
+#include <SFML/Graphics.hpp>
 
 struct EntityManager {
 	std::vector<std::shared_ptr<Entity>> list;

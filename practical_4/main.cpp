@@ -1,7 +1,5 @@
 #include <SFML\Graphics.hpp>
-#include "entity.h"
-#include "player.h"
-#include "ghost.h"
+#include "ecm.h"
 #include "entityManager.h"
 #include "system_renderer.h"
 #include "pacman.h"
