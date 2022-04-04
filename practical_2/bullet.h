@@ -1,4 +1,3 @@
-//bullet.h
 #pragma once
 #include <SFML/Graphics.hpp>
 
@@ -21,4 +20,6 @@ protected:
 	void _Update(const float& dt);
 	//false=player bullet, true=enemy bullet
 	bool _mode;
+
+
 };

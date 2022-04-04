@@ -29,7 +29,7 @@ void Bullet::_Update(const float& dt) {
 	if (getPosition().y < -32 || getPosition().y > gameHeight + 32) {
 		//do nothing, bullet out of screen
 		return;
-	} 
+	}
 	else
 	{
 		const FloatRect boundingBox = getGlobalBounds();
@@ -44,7 +44,7 @@ void Bullet::_Update(const float& dt) {
 				//invaders' bullets dont collide with other invaders
 				continue;
 			}
-			if (!s->is_exploded() && s->getGlobalBounds().intersects(boundingBox)) {
+			if (!s->is_exploded() && s->getGlobalBounds().findIntersection(boundingBox)) {
 				//explode the ship
 				s->Explode();
 				//warp bullet off-screen
@@ -54,8 +54,8 @@ void Bullet::_Update(const float& dt) {
 		}
 
 	}
-}
 
+}
 void Bullet::Fire(const sf::Vector2f& pos, const bool mode) {
 	bullets[++bulletPointer] = Bullet(pos, mode);
 }
